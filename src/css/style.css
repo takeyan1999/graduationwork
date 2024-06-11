@@ -1,0 +1,20 @@
+:root {
+    /* 色管理用の変数 */
+    --black-color: #333;
+    --primary-color: #00afa8;
+    --secondary-color: #63d297;
+    --gray-color: #dadce0;
+}
+
+/* ---------- base ---------- */
+body {
+    color: var(--black-color);
+    font-size: 16px;
+    font-family: "Noto Sans JP", sans-serif;
+    line-height: 1.75;
+}
+
+.account-img {
+    width: 40px;
+    height: 40px;
+}
