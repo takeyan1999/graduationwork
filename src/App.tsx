@@ -5,9 +5,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./css/style.css";
 import QuizHeader from "./Components/QuizHeader";
+import QuizBody from "./Components/QuizBody";
 
 const App = () => {
-    return <QuizHeader />;
+    return (
+        <>
+            <QuizHeader />
+            <QuizBody />
+        </>
+    );
 };
 
 export default App;

@@ -1,1 +1,5 @@
+# node_modulesをアップしない
 node_modules/
+
+# 鍵をアップロードしない
+*.pem
