@@ -81,3 +81,7 @@ body {
 .button_color4:hover {
     background-color: #009cbf;
 }
+
+.answer_hantei {
+    font-size: 30rem;
+}
