@@ -41,7 +41,7 @@ body {
 }
 
 .body_container {
-    padding-top: 10rem;
+    padding-top: 4rem;
     font-size: 3rem;
 }
 
@@ -55,6 +55,12 @@ body {
 
 .Answer_button {
     height: 6rem;
+}
+
+.Quiz_question {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    height: 16rem;
 }
 
 .button_color1 {

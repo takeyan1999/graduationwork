@@ -1,41 +1,58 @@
-import React, { SetStateAction } from "react";
-import { useState } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import MaruBatu from "./MaruBatu";
 
 type QuizBodyProps = {
-    QuestionCounter: React.Dispatch<SetStateAction<number>>;
+    SetMaruBatuOpen: React.Dispatch<React.SetStateAction<Boolean>>;
+    SetAnswer_Check: React.Dispatch<React.SetStateAction<Boolean>>;
 };
 
 const QuizMaker = (props: QuizBodyProps) => {
-    const [Answer_Check, SetAnswer_Check] = useState<Boolean>(false);
-    const [MaruBatuOpen, SetMaruBatuOpen] = useState<Boolean>(false);
-
-    const QuestionCount = () => {
-        props.QuestionCounter((counter) => counter + 1);
+    let QuizList = {
+        ID: 1,
+        Quiz: "3+5=",
+        Choice1: "1",
+        Choice2: "2",
+        Choice3: "3",
+        Choice4: "8",
+        AnswerChoice: 4,
     };
 
     const MaruBatuShow = () => {
-        SetMaruBatuOpen((MaruBatuOpen) => !MaruBatuOpen);
+        props.SetMaruBatuOpen((MaruBatuOpen) => !MaruBatuOpen);
+    };
+
+    let CollectCount = 0;
+    let WrongCount = 0;
+
+    const AnswerCheck = (AnswerNumber: number) => {
+        if (AnswerNumber === QuizList["AnswerChoice"]) {
+            props.SetAnswer_Check(true);
+            CollectCount += 1;
+        } else {
+            props.SetAnswer_Check(false);
+            WrongCount += 1;
+        }
     };
 
     const handleClick = (answerNunmber: number) => {
-        console.log(answerNunmber);
-        SetAnswer_Check(true);
+        AnswerCheck(answerNunmber);
         MaruBatuShow();
-        setTimeout(MaruBatuShow, 2000);
-        QuestionCount();
+
+        console.log(CollectCount);
+        console.log(WrongCount);
     };
 
+    // QuizBodyにNextQuestionに作る。
+    // NextQuestion　きのう　QuesitonCount+1 次の問題を読み込み　問題数確認。
     // このあと、何秒か待って次の問題に映ることができるようにする機能をつける。
 
     return (
         <>
-            <h1 className="p-5">ここに問題が入ります。</h1>
-            <Container className="p-5">
+            <Container>
+                <h1 className="Quiz_question text-left w-75 m-auto">{QuizList["Quiz"]}</h1>
                 <Row>
                     <Col className="d-grid">
                         <Button
@@ -44,7 +61,7 @@ const QuizMaker = (props: QuizBodyProps) => {
                             size="lg"
                             onClick={() => handleClick(1)}
                         >
-                            選択肢１
+                            {QuizList["Choice1"]}
                         </Button>
                     </Col>
                     <Col className="d-grid">
@@ -54,7 +71,7 @@ const QuizMaker = (props: QuizBodyProps) => {
                             size="lg"
                             onClick={() => handleClick(2)}
                         >
-                            選択肢２
+                            {QuizList["Choice2"]}
                         </Button>
                     </Col>
                 </Row>
@@ -66,7 +83,7 @@ const QuizMaker = (props: QuizBodyProps) => {
                             size="lg"
                             onClick={() => handleClick(3)}
                         >
-                            選択肢３
+                            {QuizList["Choice3"]}
                         </Button>
                     </Col>
                     <Col className="d-grid">
@@ -76,12 +93,11 @@ const QuizMaker = (props: QuizBodyProps) => {
                             size="lg"
                             onClick={() => handleClick(4)}
                         >
-                            選択肢４
+                            {QuizList["Choice4"]}
                         </Button>
                     </Col>
                 </Row>
             </Container>
-            {MaruBatuOpen && <MaruBatu Answer_Check={Answer_Check} />}
         </>
     );
 };
