@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import QuizMaker from "./QuizMaker";
 import acount_img from "../images/acount.jpeg";
 import MaruBatu from "./MaruBatu";
+// import Answer_results from "./Answer_result";
 
 interface QuizList {
     id: number | null;
@@ -21,15 +22,21 @@ interface QuizList {
 
 type appProps = {
     QuizList: QuizList[];
+    Answer_result: boolean;
+    setAnswer_result: React.Dispatch<React.SetStateAction<boolean>>;
+    setCollectCount: React.Dispatch<React.SetStateAction<number>>;
+    setWrongCount: React.Dispatch<React.SetStateAction<number>>;
+    CollectCount: number;
 };
 
 const QuizBody = (props: appProps) => {
     const [QuestionCounter, SetQuestionCounter] = useState<number>(1);
-    const [MaruBatuOpen, SetMaruBatuOpen] = useState<Boolean>(false);
-    const [Answer_Check, SetAnswer_Check] = useState<Boolean>(false);
+    const [MaruBatuOpen, SetMaruBatuOpen] = useState<boolean>(false);
+    const [Answer_Check, SetAnswer_Check] = useState<boolean>(false);
+
     let MakerName: string = "Alice";
 
-    console.log(props.QuizList);
+    console.log(props.CollectCount);
 
     const QuestionCount = () => {
         SetQuestionCounter((counter) => counter + 1);
@@ -37,10 +44,14 @@ const QuizBody = (props: appProps) => {
     const MaruBatuShow = () => {
         SetMaruBatuOpen((MaruBatuOpen) => !MaruBatuOpen);
     };
+
     const NextQuizHandleEvent = () => {
         MaruBatuShow();
-        if (QuestionCounter >= 10) {
-            console.log("finnish!");
+        console.log(MaruBatuOpen);
+
+        if (QuestionCounter >= props.QuizList.length) {
+            QuestionCount();
+            props.setAnswer_result((Answer_result) => !Answer_result);
         } else {
             QuestionCount();
         }
@@ -62,17 +73,32 @@ const QuizBody = (props: appProps) => {
                     SetMaruBatuOpen={SetMaruBatuOpen}
                     SetAnswer_Check={SetAnswer_Check}
                     QuizList={props.QuizList}
+                    QuestionCounter={QuestionCounter}
+                    setCollectCount={props.setCollectCount}
+                    setWrongCount={props.setWrongCount}
                 />
             </Container>
             {MaruBatuOpen && <MaruBatu Answer_Check={Answer_Check} />}
-            <Button
-                className="mt-5 start-50 translate-middle z-2 position-absolute Next_button"
-                variant="primary"
-                size="lg"
-                onClick={NextQuizHandleEvent}
-            >
-                次の問題
-            </Button>
+            {MaruBatuOpen &&
+                (props.Answer_result ? (
+                    <Button
+                        className="mt-5 start-50 translate-middle z-2 position-absolute Next_button"
+                        variant="primary"
+                        size="lg"
+                        onClick={NextQuizHandleEvent}
+                    >
+                        結果発表
+                    </Button>
+                ) : (
+                    <Button
+                        className="mt-5 start-50 translate-middle z-2 position-absolute Next_button"
+                        variant="primary"
+                        size="lg"
+                        onClick={NextQuizHandleEvent}
+                    >
+                        次の問題
+                    </Button>
+                ))}
         </>
     );
 };

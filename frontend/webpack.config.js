@@ -49,6 +49,7 @@ module.exports = {
         static: {
             directory: __dirname + "/dist",
         },
+        historyApiFallback: true,
         port: 8080,
     },
 };

@@ -63,6 +63,11 @@ body {
     height: 16rem;
 }
 
+.Quiz_result {
+    margin-top: 4rem;
+    font-size: 5rem;
+}
+
 .button_color1 {
     background-color: var(--pink-color);
 }
@@ -90,4 +95,36 @@ body {
 
 .answer_hantei {
     font-size: 30rem;
+}
+
+.home_choice1 {
+    font-size: 3rem;
+    aspect-ratio: 1 / 1;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+    background-color: var(--orange-color);
+}
+.home_choice1:hover {
+    background-color: #db7e2c;
+    transition-duration: 0.5s;
+    transform: scale(0.8, 0.8);
+}
+.home_choice2 {
+    font-size: 3rem;
+    aspect-ratio: 1 / 1;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+    background-color: var(--green-color);
+}
+.home_choice2:hover {
+    transition-duration: 0.5s;
+    transform: scale(0.8, 0.8);
+    background-color: #9aa926;
+}
+
+.home_container {
+    height: 70vh;
+    margin: auto;
 }
