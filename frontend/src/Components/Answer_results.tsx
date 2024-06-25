@@ -4,7 +4,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 type Answer_resultProps = {
-    AllQuizNumber: number;
     CollectCount: number;
     WrongCount: number;
 };

@@ -36,8 +36,6 @@ const QuizBody = (props: appProps) => {
 
     let MakerName: string = "Alice";
 
-    console.log(props.CollectCount);
-
     const QuestionCount = () => {
         SetQuestionCounter((counter) => counter + 1);
     };
@@ -47,7 +45,6 @@ const QuizBody = (props: appProps) => {
 
     const NextQuizHandleEvent = () => {
         MaruBatuShow();
-        console.log(MaruBatuOpen);
 
         if (QuestionCounter >= props.QuizList.length) {
             QuestionCount();

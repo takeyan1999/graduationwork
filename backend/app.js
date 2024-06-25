@@ -15,7 +15,6 @@ const connection = mysql.createConnection({
     database: "db_quizapp",
 });
 
-// 予定の表示処理
 connection.connect((error) => {
     if (error) throw error;
     console.log("Successfully connected to MySQL! ");
@@ -26,6 +25,18 @@ app.get("/quizlist", (req, res) => {
     connection.query(selectQuery, (error, result) => {
         if (error) throw error;
         res.json(result);
+    });
+});
+
+app.post("/quizlist", (req, res) => {
+    const { Quiz, Choice1, Choice2, Choice3, Choice4, AnswerChoice } = req.body;
+    const insertQuery = `
+    INSERT INTO quizlist (id, Quiz, Choice1, Choice2,Choice3,Choice4,AnswerChoice) VALUES
+    (null, '${Quiz}', '${Choice1}', '${Choice2}', '${Choice3}', '${Choice4}', ${AnswerChoice})
+  `;
+    connection.query(insertQuery, (error) => {
+        if (error) throw error;
+        res.end();
     });
 });
 
