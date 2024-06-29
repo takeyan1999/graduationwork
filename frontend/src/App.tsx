@@ -12,6 +12,7 @@ import QuizHeader from "./Shared/QuizHeader";
 import Quiz from "./Pages/Quiz";
 import Home from "./Pages/home";
 import Make from "./Pages/make";
+import Admin from "./Pages/Admin";
 
 interface QuizList {
     id: number | null;
@@ -82,6 +83,34 @@ const App = () => {
         }).then(QuizList);
     };
 
+    const deleteEvent = (id: number | null) => {
+        console.log(id);
+        const targetUrl = API_URL + id;
+        fetch(targetUrl, {
+            method: "DELETE",
+        }).then(QuizList);
+    };
+
+    const editEvent = (
+        id: number | null,
+        Quiz: string,
+        Choice1: string,
+        Choice2: string,
+        Choice3: string,
+        Choice4: string,
+        AnswerChoice: number
+    ) => {
+        const targetUrl = API_URL + id;
+        const editData = { Quiz, Choice1, Choice2, Choice3, Choice4, AnswerChoice };
+        fetch(targetUrl, {
+            body: JSON.stringify(editData),
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(QuizList);
+    };
+
     return (
         <>
             <BrowserRouter>
@@ -91,6 +120,10 @@ const App = () => {
                     <Route path="/*" element={<Home />} />
                     <Route path="/quiz" element={<Quiz QuizLi={QuizLi} setQuizLi={setQuizLi} />} />
                     <Route path="/make" element={<Make addQuiz={addQuiz} />} />
+                    <Route
+                        path="/admin"
+                        element={<Admin QuizLi={QuizLi} deleteEvent={deleteEvent} editEvent={editEvent} />}
+                    />
                 </Routes>
             </BrowserRouter>
         </>

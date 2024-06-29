@@ -22,7 +22,7 @@ const QuizHeader = () => {
                     <Navbar.Collapse className="justify-content-end">
                         <Image src={acount} roundedCircle className="account-img" />
                         <NavDropdown title="" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">設定</NavDropdown.Item>
+                            <NavDropdown.Item href="/admin">問題管理画面</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.4">ログアウト</NavDropdown.Item>
                         </NavDropdown>

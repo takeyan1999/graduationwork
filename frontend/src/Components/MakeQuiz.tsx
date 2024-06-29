@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -30,6 +31,7 @@ const MakeQuiz = (props: makeProps) => {
     const [isQuizChoice3, setIsQuizChoice3] = useState<boolean>(false);
     const [isQuizChoice4, setIsQuizChoice4] = useState<boolean>(false);
     const [isAnswer, setIsAnswer] = useState<boolean>(false);
+    const [show, setShow] = useState(false);
 
     const makeQuizHandleEvent = () => {
         setIsQuizText(false);
@@ -71,7 +73,18 @@ const MakeQuiz = (props: makeProps) => {
             setIsAnswer(true);
         } else {
             props.addQuiz(QuizText, QuizChoice1, QuizChoice2, QuizChoice3, QuizChoice4, Answer);
+            setShow(true);
         }
+    };
+
+    const handleClose = () => {
+        setQuizText("");
+        setChoice1("");
+        setChoice2("");
+        setChoice3("");
+        setChoice4("");
+        setAnswer(null);
+        setShow(false);
     };
 
     return (
@@ -79,12 +92,16 @@ const MakeQuiz = (props: makeProps) => {
             <Container className="">
                 <Form.Group className="Quiz_question mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label className="fs-3">問題を記入してください</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={4}
-                        placeholder="記入例）4+2="
-                        onChange={(e) => setQuizText(e.target.value)}
-                    />
+                    {QuizText !== null && (
+                        <Form.Control
+                            as="textarea"
+                            rows={4}
+                            placeholder="記入例）4+2="
+                            value={QuizText}
+                            onChange={(e) => setQuizText(e.target.value)}
+                        />
+                    )}
+
                     <span className="text-danger" style={{ visibility: isQuizText ? "visible" : "hidden" }}>
                         正しく記入されていません
                     </span>
@@ -101,12 +118,15 @@ const MakeQuiz = (props: makeProps) => {
                             <InputGroup.Text id="basic-addon1">
                                 <Form.Check name="group1" type="radio" id="1" label="1" onChange={() => setAnswer(1)} />
                             </InputGroup.Text>
-                            <Form.Control
-                                placeholder="選択肢１"
-                                aria-label="Username"
-                                aria-describedby="basic-addon1"
-                                onChange={(e) => setChoice1(e.target.value)}
-                            />
+                            {QuizChoice1 !== null && (
+                                <Form.Control
+                                    placeholder="選択肢１"
+                                    aria-label="Username"
+                                    aria-describedby="basic-addon1"
+                                    value={QuizChoice1}
+                                    onChange={(e) => setChoice1(e.target.value)}
+                                />
+                            )}
                         </InputGroup>
                         <span className="text-danger" style={{ visibility: isQuizChoice1 ? "visible" : "hidden" }}>
                             正しく記入されていません
@@ -117,12 +137,15 @@ const MakeQuiz = (props: makeProps) => {
                             <InputGroup.Text id="basic-addon2">
                                 <Form.Check name="group1" type="radio" id="2" label="2" onChange={() => setAnswer(2)} />
                             </InputGroup.Text>
-                            <Form.Control
-                                placeholder="選択肢２"
-                                aria-label="Username"
-                                aria-describedby="basic-addon2"
-                                onChange={(e) => setChoice2(e.target.value)}
-                            />
+                            {QuizChoice2 !== null && (
+                                <Form.Control
+                                    placeholder="選択肢２"
+                                    aria-label="Username"
+                                    aria-describedby="basic-addon2"
+                                    value={QuizChoice2}
+                                    onChange={(e) => setChoice2(e.target.value)}
+                                />
+                            )}
                         </InputGroup>
                         <span className="text-danger" style={{ visibility: isQuizChoice2 ? "visible" : "hidden" }}>
                             正しく記入されていません
@@ -135,12 +158,15 @@ const MakeQuiz = (props: makeProps) => {
                             <InputGroup.Text id="basic-addon3">
                                 <Form.Check name="group1" type="radio" id="3" label="3" onChange={() => setAnswer(3)} />
                             </InputGroup.Text>
-                            <Form.Control
-                                placeholder="選択肢３"
-                                aria-label="Username"
-                                aria-describedby="basic-addon3"
-                                onChange={(e) => setChoice3(e.target.value)}
-                            />
+                            {QuizChoice3 !== null && (
+                                <Form.Control
+                                    placeholder="選択肢３"
+                                    aria-label="Username"
+                                    aria-describedby="basic-addon3"
+                                    value={QuizChoice3}
+                                    onChange={(e) => setChoice3(e.target.value)}
+                                />
+                            )}
                         </InputGroup>
                         <span className="text-danger" style={{ visibility: isQuizChoice3 ? "visible" : "hidden" }}>
                             正しく記入されていません
@@ -151,12 +177,15 @@ const MakeQuiz = (props: makeProps) => {
                             <InputGroup.Text id="basic-addon4">
                                 <Form.Check name="group1" type="radio" id="4" label="4" onChange={() => setAnswer(4)} />
                             </InputGroup.Text>
-                            <Form.Control
-                                placeholder="選択肢４"
-                                aria-label="Username"
-                                aria-describedby="basic-addon4"
-                                onChange={(e) => setChoice4(e.target.value)}
-                            />
+                            {QuizChoice4 !== null && (
+                                <Form.Control
+                                    placeholder="選択肢４"
+                                    aria-label="Username"
+                                    aria-describedby="basic-addon4"
+                                    value={QuizChoice4}
+                                    onChange={(e) => setChoice4(e.target.value)}
+                                />
+                            )}
                         </InputGroup>
                         <span className="text-danger" style={{ visibility: isQuizChoice4 ? "visible" : "hidden" }}>
                             正しく記入されていません
@@ -172,6 +201,17 @@ const MakeQuiz = (props: makeProps) => {
             >
                 問題を作る
             </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>問題を作りました！</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        OK!
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

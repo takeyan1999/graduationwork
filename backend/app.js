@@ -40,6 +40,38 @@ app.post("/quizlist", (req, res) => {
     });
 });
 
+app.put("/quizlist/:id", (req, res) => {
+    const requestId = Number(req.params.id);
+    const { Quiz, Choice1, Choice2, Choice3, Choice4, AnswerChoice } = req.body;
+    const updateQuery = `
+    UPDATE quizlist
+    SET    Quiz='${Quiz}',
+           Choice1='${Choice1}',
+           Choice2='${Choice2}',
+           Choice3='${Choice3}',
+           Choice4='${Choice4}',
+           AnswerChoice='${AnswerChoice}'
+    WHERE  id=${requestId}
+  `;
+    connection.query(updateQuery, (error) => {
+        if (error) throw error;
+        res.end();
+    });
+});
+
+app.delete("/quizlist/:id", (req, res) => {
+    const requestId = Number(req.params.id);
+    const deleteQuery = `
+    DELETE
+    FROM   quizlist
+    WHERE  id=${requestId}
+  `;
+    connection.query(deleteQuery, (error) => {
+        if (error) throw error;
+        res.end();
+    });
+});
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
