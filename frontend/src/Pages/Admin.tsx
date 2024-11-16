@@ -88,7 +88,7 @@ const admin = (props: AppProps) => {
                             {props.QuizLi[0] &&
                                 props.QuizLi.map((QuizList) => {
                                     return (
-                                        <tr>
+                                        <tr key={QuizList.id}>
                                             <td>{QuizList.id}</td>
                                             <td>{QuizList.Quiz}</td>
                                             <td>{QuizList.Choice1}</td>

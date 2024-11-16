@@ -5,7 +5,8 @@ import "./css/reset.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./css/style.css";
-import { fetchQuizList, addQuizList, deleteQuizList, checkQuizList } from "../utils/supabaseFunctions.ts";
+
+import axios from "axios";
 
 import QuizHeader from "./Shared/QuizHeader";
 import Quiz from "./Pages/Quiz";
@@ -13,17 +14,17 @@ import Home from "./Pages/home";
 import Make from "./Pages/make";
 import Admin from "./Pages/Admin";
 
-interface QuizList {
-    id: number | null;
-    Quiz: string;
-    Choice1: string;
-    Choice2: string;
-    Choice3: string;
-    Choice4: string;
-    AnswerChoice: number | null;
-}
-
 const App = () => {
+    interface QuizList {
+        id: number | null;
+        Quiz: string;
+        Choice1: string;
+        Choice2: string;
+        Choice3: string;
+        Choice4: string;
+        AnswerChoice: number | null;
+    }
+
     const [QuizLi, setQuizLi] = useState<QuizList[]>([
         {
             id: 0,
@@ -39,40 +40,95 @@ const App = () => {
     let AllQuizNumber: number = 0;
 
     useEffect(() => {
-        fetchQuiz();
+        (async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/quizs");
+                setQuizLi(response.data); // データをstateにセット
+            } catch (error) {
+                console.error("Error fetching todos:", error);
+            }
+        })();
         AllQuizNumber = QuizLi.length;
         console.log(AllQuizNumber);
     }, []);
 
-    useEffect(() => {
-        fetchQuizList();
-    }, []);
+    const addQuiz = (
+        Quiz: string,
+        Choice1: string,
+        Choice2: String,
+        Choice3: string,
+        Choice4: string,
+        AnswerChoice: number
+    ) => {
+        const url = axios
+            //todoのところにリストが入る。
+            .post("http://localhost:3000/quizs", {
+                Quiz: Quiz,
+                Choice1: Choice1,
+                Choice2: Choice2,
+                Choice3: Choice3,
+                Choice4: Choice4,
+                AnswerChoice: AnswerChoice,
+            })
 
-    // SupabaseによるfetchTodo関数を定義
-    const fetchQuiz = async () => {
-        const quizList = (await fetchQuizList()) as QuizList[];
-        setQuizLi(quizList);
+            //then=成功した場合の処理
+            .then(() => {
+                console.log(url);
+                console.log("good");
+                console.log({
+                    Quiz: Quiz,
+                    Choice1: Choice1,
+                    Choice2: Choice2,
+                    Choice3: Choice3,
+                    Choice4: Choice4,
+                    AnswerChoice: AnswerChoice,
+                });
+            })
+            //catch=エラー時の処理
+            .catch((err) => {
+                console.log("err:", err);
+            });
     };
 
-    // SupabaseによるaddTodo関数を定義
-    const addQuiz = async (inputTitle: string) => {
-        if (!inputTitle) return;
-
-        await addQuizList(inputTitle);
-        fetchQuizList();
+    const deleteEvent = (deleteid: number | null) => {
+        console.log("delete");
+        if (deleteid !== null) {
+            console.log(deleteid);
+            const url = axios
+                .delete("http://localhost:3000/quizs?id=" + deleteid)
+                .then(() => {
+                    console.log("削除ID:", url);
+                })
+                .catch((err) => {
+                    console.log("err:", err);
+                });
+        }
     };
 
-    // SupabaseによるdeleteTodo関数を定義
-    const deleteEvent = async (id: number) => {
-        await deleteQuizList(id);
-        fetchQuizList();
+    const editEvent = (
+        id: number | null,
+        Quiz: string,
+        Choice1: string,
+        Choice2: string,
+        Choice3: string,
+        Choice4: string,
+        AnswerChoice: number
+    ) => {
+        axios
+            .put("http://localhost:3000/quizs?id=" + id, {
+                Quiz: Quiz,
+                Choice1: Choice1,
+                Choice2: Choice2,
+                Choice3: Choice3,
+                Choice4: Choice4,
+                AnswerChoice: AnswerChoice,
+            })
+            .then((response) => {
+                setQuizLi(response.data);
+            });
     };
 
-    // SupabaseによるcheckTodo関数を定義
-    const editEvent = async (id: number, status: boolean) => {
-        await checkQuizList(id, status);
-        fetchQuiz();
-    };
+    console.log(QuizLi);
 
     return (
         <>
