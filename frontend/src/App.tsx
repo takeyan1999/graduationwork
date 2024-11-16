@@ -5,8 +5,7 @@ import "./css/reset.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./css/style.css";
-
-const API_URL = "http://localhost:3000/quizlist/";
+import { fetchQuizList, addQuizList, deleteQuizList, checkQuizList } from "../utils/supabaseFunctions.ts";
 
 import QuizHeader from "./Shared/QuizHeader";
 import Quiz from "./Pages/Quiz";
@@ -40,75 +39,39 @@ const App = () => {
     let AllQuizNumber: number = 0;
 
     useEffect(() => {
-        QuizList();
+        fetchQuiz();
         AllQuizNumber = QuizLi.length;
         console.log(AllQuizNumber);
     }, []);
 
-    const QuizList = () => {
-        fetch(API_URL)
-            .then((responseData) => {
-                return responseData.json();
-            })
-            .then((results) => {
-                const fetchData = results.map((result: QuizList) => {
-                    return {
-                        id: result.id,
-                        Quiz: result.Quiz,
-                        Choice1: result.Choice1,
-                        Choice2: result.Choice2,
-                        Choice3: result.Choice3,
-                        Choice4: result.Choice4,
-                        AnswerChoice: result.AnswerChoice,
-                    };
-                });
-                setQuizLi(fetchData);
-            });
-    };
-    const addQuiz = (
-        Quiz: string,
-        Choice1: string,
-        Choice2: string,
-        Choice3: string,
-        Choice4: string,
-        AnswerChoice: number
-    ) => {
-        const json = { Quiz, Choice1, Choice2, Choice3, Choice4, AnswerChoice };
-        fetch(API_URL, {
-            body: JSON.stringify(json),
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then(QuizList);
+    useEffect(() => {
+        fetchQuizList();
+    }, []);
+
+    // SupabaseによるfetchTodo関数を定義
+    const fetchQuiz = async () => {
+        const quizList = (await fetchQuizList()) as QuizList[];
+        setQuizLi(quizList);
     };
 
-    const deleteEvent = (id: number | null) => {
-        console.log(id);
-        const targetUrl = API_URL + id;
-        fetch(targetUrl, {
-            method: "DELETE",
-        }).then(QuizList);
+    // SupabaseによるaddTodo関数を定義
+    const addQuiz = async (inputTitle: string) => {
+        if (!inputTitle) return;
+
+        await addQuizList(inputTitle);
+        fetchQuizList();
     };
 
-    const editEvent = (
-        id: number | null,
-        Quiz: string,
-        Choice1: string,
-        Choice2: string,
-        Choice3: string,
-        Choice4: string,
-        AnswerChoice: number
-    ) => {
-        const targetUrl = API_URL + id;
-        const editData = { Quiz, Choice1, Choice2, Choice3, Choice4, AnswerChoice };
-        fetch(targetUrl, {
-            body: JSON.stringify(editData),
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then(QuizList);
+    // SupabaseによるdeleteTodo関数を定義
+    const deleteEvent = async (id: number) => {
+        await deleteQuizList(id);
+        fetchQuizList();
+    };
+
+    // SupabaseによるcheckTodo関数を定義
+    const editEvent = async (id: number, status: boolean) => {
+        await checkQuizList(id, status);
+        fetchQuiz();
     };
 
     return (
